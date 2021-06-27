@@ -1,0 +1,20 @@
+[File]
+- New...
+- Open
+- Save
+- Save As
+
+[Edit]
+- Cut
+- Copy
+- Paste
+
+[Class]
+- Student List
+- View Calendar
+- Edit Info
+	- {DIALOG}
+
+[Help]
+- Manual
+- About
