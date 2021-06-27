@@ -22,18 +22,19 @@ namespace FS_CS_ETS_Project
 
         internal void New(string name, string teacherName, string roomNumber, DateTime startDate, DateTime endDate, List<AttendanceEvent> events = null)
         {
-            List<AttendanceEvent> defaultEvents = new List<AttendanceEvent>();
-
-            defaultEvents.Add(AttendanceEvent.Present);
-            defaultEvents.Add(AttendanceEvent.Tardy);
-            defaultEvents.Add(AttendanceEvent.Absent);
+            List<AttendanceEvent> defaultEvents = new List<AttendanceEvent>
+            {
+                AttendanceEvent.Present,
+                AttendanceEvent.Tardy,
+                AttendanceEvent.Absent
+            };
 
             if (events != null)
             {
                 defaultEvents.AddRange(events);
             }
 
-            @class = new Class(name, teacherName, roomNumber, startDate.Date, endDate.Date, new List<Student>(), new List<StudentAttribute>(), defaultEvents);
+            @class = new Class(name, teacherName, roomNumber, startDate.Date, endDate.Date, new List<Student>(), defaultEvents);
 
             MdiParent = Globals.mainForm;
             Text = @class.name;
@@ -52,7 +53,7 @@ namespace FS_CS_ETS_Project
         private void addStudentButton_Click(object sender, EventArgs e)
         {
             NewStudentDialog dialog = new NewStudentDialog();
-            
+
             dialog.activeClass = this;
             dialog.seatNumberField.Value = @class.students.Count + 1;
             dialog.ShowDialog();
@@ -75,13 +76,15 @@ namespace FS_CS_ETS_Project
             }
         }
 
-        internal void CreateStudent(string name, int seatNumber, DateTime birthday, string address1, string address2, string notes, List<StudentAttribute> attributes, Dictionary<DateTime, AttendanceEvent> attendanceRecord)
+        internal void CreateStudent(string name, int seatNumber, DateTime birthday, string address1, string address2, string notes, Dictionary<DateTime, AttendanceEvent> attendanceRecord)
         {
             // Create the student
-            @class.CreateStudent(name, seatNumber, birthday, address1, address2, notes, attributes, attendanceRecord);
+            @class.CreateStudent(name, seatNumber, birthday, address1, address2, notes, attendanceRecord);
 
             // Add them to the visible list
-            studentListContainer.Items.Add(name);
+            studentListContainer.Items.Add(attendanceRecord.ContainsKey(DateTime.Today) ?
+                $"{name} - {attendanceRecord[DateTime.Today].name}" :
+                name);
 
             // Write to the console (make sure this whole thing actually got done
             Console.WriteLine("Added a student.");
@@ -292,6 +295,13 @@ namespace FS_CS_ETS_Project
 
             dialog.New(@class.students[selectedIndex]);
         }
+
+        internal void UpdateStudentAttendanceOnList(Student student, string eventName)
+        {
+            if (!@class.students.Contains(student)) throw new NullReferenceException();
+
+            studentListContainer.Items[@class.students.IndexOf(student)].Text = @class.students[selectedIndex].name + " - " + eventName;
+        }
     }
 
     internal class Class
@@ -303,10 +313,9 @@ namespace FS_CS_ETS_Project
         internal DateTime endDate;
 
         internal List<Student> students = new List<Student>();
-        internal List<StudentAttribute> studentAttributeSet = new List<StudentAttribute>();
         internal List<AttendanceEvent> attendanceEvents = new List<AttendanceEvent>();
 
-        public Class(string name, string teacherName, string roomNumber, DateTime startDate, DateTime endDate, List<Student> students, List<StudentAttribute> studentAttributes, List<AttendanceEvent> attendanceEvents)
+        public Class(string name, string teacherName, string roomNumber, DateTime startDate, DateTime endDate, List<Student> students, List<AttendanceEvent> attendanceEvents)
         {
             this.name = name;
             this.teacherName = teacherName;
@@ -314,8 +323,6 @@ namespace FS_CS_ETS_Project
             this.startDate = startDate;
             this.endDate = endDate;
             this.students = students;
-
-            studentAttributeSet = studentAttributes;
 
             this.attendanceEvents = attendanceEvents;
         }
@@ -329,48 +336,14 @@ namespace FS_CS_ETS_Project
         /// <param name="address1">Student's primary address.</param>
         /// <param name="address2">Student's secondary address.</param>
         /// <param name="notes">Notes about the student.</param>
-        internal void CreateStudent(string name, int seatNumber, DateTime birthday, string address1, string address2, string notes, List<StudentAttribute> attributes, Dictionary<DateTime, AttendanceEvent> attendanceRecord)
+        internal void CreateStudent(string name, int seatNumber, DateTime birthday, string address1, string address2, string notes, Dictionary<DateTime, AttendanceEvent> attendanceRecord)
         {
-            Student student = new Student(name, seatNumber, birthday, address1, address2, notes, attributes, attendanceRecord);
+            Student student = new Student(name, seatNumber, birthday, address1, address2, notes, attendanceRecord);
 
             if (students == null) { students = new List<Student>(); }
 
             students.Add(student);
         }
-    }
-
-    /// <summary>
-    /// Base class for all student attributes.
-    /// </summary>
-    internal class StudentAttribute
-    {
-        internal string name = "";
-    }
-
-    /// <summary>
-    /// Represents an integer attribute given to a student.
-    /// </summary>
-    internal class StudentIntAttribute : StudentAttribute
-    {
-        internal int value;
-    }
-
-    /// <summary>
-    /// Represents a short text attribute given to a student.
-    /// </summary>
-    internal class StudentStringAttribute : StudentAttribute
-    {
-        internal string value;
-        internal bool multiline;
-    }
-
-    /// <summary>
-    /// Represents a short text attribute given to a student.
-    /// </summary>
-    internal class StudentDateAttribute : StudentAttribute
-    {
-        internal DateTime value;
-        internal DateTimeKind dateTimeKind;
     }
 
     internal class AttendanceEvent

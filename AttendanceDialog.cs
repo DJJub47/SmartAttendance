@@ -77,6 +77,9 @@ namespace FS_CS_ETS_Project
                     // Edit today's attendnace log for this student.
                     student.attendanceRecord[dateField.Value.Date] = new AttendanceEvent(nameField.Text, notesField.Text);
                 }
+
+                // Mark the student's attendance on the list
+                parent.UpdateStudentAttendanceOnList(student, nameField.Text);
             }
             else // On the other hand, we're logging an existing event to the student.
             {
@@ -89,6 +92,9 @@ namespace FS_CS_ETS_Project
                 {
                     student.attendanceRecord[dateField.Value.Date] = new AttendanceEvent(attendanceTypeList.Text, notesField.Text); // Edit today's log to match the new event.
                 }
+
+                // Mark the student's attendance on the list
+                parent.UpdateStudentAttendanceOnList(student, attendanceTypeList.Text);
             }
 
             // Mark the class as unsaved, and close this dialog.

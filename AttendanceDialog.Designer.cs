@@ -34,12 +34,12 @@
             this.attendanceTypeList = new System.Windows.Forms.ComboBox();
             this.nameLabel = new System.Windows.Forms.Label();
             this.nameField = new System.Windows.Forms.TextBox();
-            this.notesLabel = new System.Windows.Forms.Label();
-            this.notesField = new System.Windows.Forms.TextBox();
-            this.notesSplit = new System.Windows.Forms.SplitContainer();
-            this.submitButton = new System.Windows.Forms.Button();
             this.dateLabel = new System.Windows.Forms.Label();
             this.dateField = new System.Windows.Forms.DateTimePicker();
+            this.notesSplit = new System.Windows.Forms.SplitContainer();
+            this.notesLabel = new System.Windows.Forms.Label();
+            this.notesField = new System.Windows.Forms.TextBox();
+            this.applyButton = new System.Windows.Forms.Button();
             this.attendanceGroup.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mainSplit)).BeginInit();
             this.mainSplit.Panel1.SuspendLayout();
@@ -133,6 +133,45 @@
             this.nameField.TabIndex = 1;
             this.nameField.Visible = false;
             // 
+            // dateLabel
+            // 
+            this.dateLabel.AutoSize = true;
+            this.dateLabel.Location = new System.Drawing.Point(11, 60);
+            this.dateLabel.Name = "dateLabel";
+            this.dateLabel.Size = new System.Drawing.Size(30, 13);
+            this.dateLabel.TabIndex = 4;
+            this.dateLabel.Text = "Date";
+            // 
+            // dateField
+            // 
+            this.dateField.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dateField.Location = new System.Drawing.Point(56, 56);
+            this.dateField.Name = "dateField";
+            this.dateField.Size = new System.Drawing.Size(200, 20);
+            this.dateField.TabIndex = 5;
+            // 
+            // notesSplit
+            // 
+            this.notesSplit.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.notesSplit.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
+            this.notesSplit.IsSplitterFixed = true;
+            this.notesSplit.Location = new System.Drawing.Point(0, 0);
+            this.notesSplit.Name = "notesSplit";
+            this.notesSplit.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // notesSplit.Panel1
+            // 
+            this.notesSplit.Panel1.Controls.Add(this.notesLabel);
+            this.notesSplit.Panel1.Controls.Add(this.notesField);
+            // 
+            // notesSplit.Panel2
+            // 
+            this.notesSplit.Panel2.Controls.Add(this.applyButton);
+            this.notesSplit.Size = new System.Drawing.Size(262, 200);
+            this.notesSplit.SplitterDistance = 169;
+            this.notesSplit.TabIndex = 6;
+            // 
             // notesLabel
             // 
             this.notesLabel.AutoSize = true;
@@ -153,55 +192,16 @@
             this.notesField.Size = new System.Drawing.Size(246, 134);
             this.notesField.TabIndex = 5;
             // 
-            // notesSplit
+            // applyButton
             // 
-            this.notesSplit.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.notesSplit.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
-            this.notesSplit.IsSplitterFixed = true;
-            this.notesSplit.Location = new System.Drawing.Point(0, 0);
-            this.notesSplit.Name = "notesSplit";
-            this.notesSplit.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            // 
-            // notesSplit.Panel1
-            // 
-            this.notesSplit.Panel1.Controls.Add(this.notesLabel);
-            this.notesSplit.Panel1.Controls.Add(this.notesField);
-            // 
-            // notesSplit.Panel2
-            // 
-            this.notesSplit.Panel2.Controls.Add(this.submitButton);
-            this.notesSplit.Size = new System.Drawing.Size(262, 200);
-            this.notesSplit.SplitterDistance = 169;
-            this.notesSplit.TabIndex = 6;
-            // 
-            // submitButton
-            // 
-            this.submitButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.submitButton.Location = new System.Drawing.Point(0, 0);
-            this.submitButton.Name = "submitButton";
-            this.submitButton.Size = new System.Drawing.Size(262, 27);
-            this.submitButton.TabIndex = 0;
-            this.submitButton.Text = "Submit";
-            this.submitButton.UseVisualStyleBackColor = true;
-            this.submitButton.Click += new System.EventHandler(this.submitButton_Click);
-            // 
-            // dateLabel
-            // 
-            this.dateLabel.AutoSize = true;
-            this.dateLabel.Location = new System.Drawing.Point(11, 60);
-            this.dateLabel.Name = "dateLabel";
-            this.dateLabel.Size = new System.Drawing.Size(30, 13);
-            this.dateLabel.TabIndex = 4;
-            this.dateLabel.Text = "Date";
-            // 
-            // dateField
-            // 
-            this.dateField.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.dateField.Location = new System.Drawing.Point(56, 56);
-            this.dateField.Name = "dateField";
-            this.dateField.Size = new System.Drawing.Size(200, 20);
-            this.dateField.TabIndex = 5;
+            this.applyButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.applyButton.Location = new System.Drawing.Point(0, 0);
+            this.applyButton.Name = "applyButton";
+            this.applyButton.Size = new System.Drawing.Size(262, 27);
+            this.applyButton.TabIndex = 0;
+            this.applyButton.Text = "Apply";
+            this.applyButton.UseVisualStyleBackColor = true;
+            this.applyButton.Click += new System.EventHandler(this.submitButton_Click);
             // 
             // AttendanceDialog
             // 
@@ -238,7 +238,7 @@
         private System.Windows.Forms.Label notesLabel;
         private System.Windows.Forms.TextBox notesField;
         private System.Windows.Forms.SplitContainer notesSplit;
-        private System.Windows.Forms.Button submitButton;
+        private System.Windows.Forms.Button applyButton;
         private System.Windows.Forms.DateTimePicker dateField;
         private System.Windows.Forms.Label dateLabel;
     }

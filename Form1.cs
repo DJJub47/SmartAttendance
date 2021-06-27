@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
+using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
-using System.Windows.Forms;
-using System.IO;
 
 namespace FS_CS_ETS_Project
 {
@@ -19,7 +19,7 @@ namespace FS_CS_ETS_Project
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            
+
         }
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
@@ -83,13 +83,13 @@ namespace FS_CS_ETS_Project
 
         private void closeAllToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            foreach(Form form in MdiChildren)
+            foreach (Form form in MdiChildren)
             {
                 form.Close();
             }
         }
 
-        void Save(ClassWindow target, bool alwaysShowDialog = false)
+        private void Save(ClassWindow target, bool alwaysShowDialog = false)
         {
             if (target == null)
             {
@@ -137,14 +137,14 @@ namespace FS_CS_ETS_Project
                         writer.WriteAttributeString("StartDate", @class.startDate.ToString());
                         writer.WriteAttributeString("EndDate", @class.endDate.ToString());
 
-                            writer.WriteStartElement("AttendanceEvents");
+                        writer.WriteStartElement("AttendanceEvents");
 
-                            foreach (AttendanceEvent @event in @class.attendanceEvents)
-                            {
-                                writer.WriteAttributeString("event" + @class.attendanceEvents.IndexOf(@event).ToString(), @event.name);
-                            }
+                        foreach (AttendanceEvent @event in @class.attendanceEvents)
+                        {
+                            writer.WriteAttributeString("event" + @class.attendanceEvents.IndexOf(@event).ToString(), @event.name);
+                        }
 
-                            writer.WriteEndElement();
+                        writer.WriteEndElement();
 
                         writer.WriteEndElement();
 
@@ -205,60 +205,60 @@ namespace FS_CS_ETS_Project
                     // Write the root element.
                     writer.WriteStartElement("Class");
 
-                        // Write the class data.
-                        writer.WriteStartElement("ClassInfo");
-                        
-                        writer.WriteAttributeString("Name", @class.name);
-                        writer.WriteAttributeString("Teacher", @class.teacherName);
-                        writer.WriteAttributeString("RoomNumber", @class.roomNumber.ToString());
-                        writer.WriteAttributeString("StartDate", @class.startDate.ToString());
-                        writer.WriteAttributeString("EndDate", @class.endDate.ToString());
+                    // Write the class data.
+                    writer.WriteStartElement("ClassInfo");
 
-                            writer.WriteStartElement("AttendanceEvents");
-                            // For each event in the attendance event list, write out its data.
-                            foreach (AttendanceEvent @event in @class.attendanceEvents)
-                            {
-                                writer.WriteAttributeString("event" + @class.attendanceEvents.IndexOf(@event).ToString(), @event.name);
-                            }
+                    writer.WriteAttributeString("Name", @class.name);
+                    writer.WriteAttributeString("Teacher", @class.teacherName);
+                    writer.WriteAttributeString("RoomNumber", @class.roomNumber.ToString());
+                    writer.WriteAttributeString("StartDate", @class.startDate.ToString());
+                    writer.WriteAttributeString("EndDate", @class.endDate.ToString());
 
-                            writer.WriteEndElement();
+                    writer.WriteStartElement("AttendanceEvents");
+                    // For each event in the attendance event list, write out its data.
+                    foreach (AttendanceEvent @event in @class.attendanceEvents)
+                    {
+                        writer.WriteAttributeString("event" + @class.attendanceEvents.IndexOf(@event).ToString(), @event.name);
+                    }
 
-                        // Close the class data.
-                        writer.WriteEndElement();
+                    writer.WriteEndElement();
 
-                        // Write the student data.
-                        writer.WriteStartElement("Students");
+                    // Close the class data.
+                    writer.WriteEndElement();
 
-                        // For each student in the class, write out their data.
-                        foreach (Student student in @class.students)
+                    // Write the student data.
+                    writer.WriteStartElement("Students");
+
+                    // For each student in the class, write out their data.
+                    foreach (Student student in @class.students)
+                    {
+                        writer.WriteStartElement("student" + @class.students.IndexOf(student).ToString());
+
+                        writer.WriteAttributeString("Name", student.name);
+                        writer.WriteAttributeString("SeatNumber", student.seatNumber.ToString());
+                        writer.WriteAttributeString("Birthday", student.birthday.ToString());
+                        writer.WriteAttributeString("Address1", student.address1);
+                        writer.WriteAttributeString("Address2", student.address2);
+                        writer.WriteAttributeString("Notes", student.notes);
+
+                        // Write the attendance record data.
+                        writer.WriteStartElement("AttendanceRecord");
+
+                        foreach (KeyValuePair<DateTime, AttendanceEvent> pair in student.attendanceRecord)
                         {
-                            writer.WriteStartElement("student" + @class.students.IndexOf(student).ToString());
+                            writer.WriteStartElement("date" + student.attendanceRecord.Keys.ToList().IndexOf(pair.Key));
 
-                            writer.WriteAttributeString("Name", student.name);
-                            writer.WriteAttributeString("SeatNumber", student.seatNumber.ToString());
-                            writer.WriteAttributeString("Birthday", student.birthday.ToString());
-                            writer.WriteAttributeString("Address1", student.address1);
-                            writer.WriteAttributeString("Address2", student.address2);
-                            writer.WriteAttributeString("Notes", student.notes);
-
-                                // Write the attendance record data.
-                                writer.WriteStartElement("AttendanceRecord");
-
-                                foreach (KeyValuePair<DateTime, AttendanceEvent> pair in student.attendanceRecord)
-                                {
-                                    writer.WriteStartElement("date" + student.attendanceRecord.Keys.ToList().IndexOf(pair.Key));
-
-                                    writer.WriteAttributeString("Date", pair.Key.Date.ToString());
-                                    writer.WriteAttributeString("Name", pair.Value.name);
-                                    writer.WriteAttributeString("Notes", pair.Value.notes);
-                                }
-
-                                writer.WriteEndElement();
-
-                            writer.WriteEndElement();
+                            writer.WriteAttributeString("Date", pair.Key.Date.ToString());
+                            writer.WriteAttributeString("Name", pair.Value.name);
+                            writer.WriteAttributeString("Notes", pair.Value.notes);
                         }
-                        // Close the student data.
+
                         writer.WriteEndElement();
+
+                        writer.WriteEndElement();
+                    }
+                    // Close the student data.
+                    writer.WriteEndElement();
 
                     // Close the root element.
                     writer.WriteEndElement();
@@ -350,7 +350,7 @@ namespace FS_CS_ETS_Project
                         }
                     }
 
-                    target.CreateStudent(name, seatNumber, birthday, address1, address2, notes, new List<StudentAttribute>(), record);
+                    target.CreateStudent(name, seatNumber, birthday, address1, address2, notes, record);
                 }
             }
 
@@ -385,6 +385,11 @@ namespace FS_CS_ETS_Project
         internal void CheckForWelcomeVisible(bool opening = false)
         {
             welcomeLabel.Visible = opening ? (MdiChildren == null || MdiChildren.Length == 0) : (MdiChildren == null || MdiChildren.Length == 1);
+        }
+
+        private void aboutToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            new AboutBox().ShowDialog();
         }
     }
 }

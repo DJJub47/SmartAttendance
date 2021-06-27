@@ -1,11 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace FS_CS_ETS_Project
@@ -36,10 +30,9 @@ namespace FS_CS_ETS_Project
 
         private void createButton_Click(object sender, EventArgs e)
         {
-            List<StudentAttribute> attributes = new List<StudentAttribute>();
             Dictionary<DateTime, AttendanceEvent> attendanceRecord = new Dictionary<DateTime, AttendanceEvent>();
 
-            activeClass.CreateStudent(nameField.Text, (int)seatNumberField.Value, birthdayField.Value.Date, addressField1.Text, addressField2.Text, notesField.Text, attributes, attendanceRecord);
+            activeClass.CreateStudent(nameField.Text, (int)seatNumberField.Value, birthdayField.Value.Date, addressField1.Text, addressField2.Text, notesField.Text, attendanceRecord);
 
             Close();
         }
@@ -58,10 +51,9 @@ namespace FS_CS_ETS_Project
         internal string address1;
         internal string address2;
         internal string notes;
-        internal List<StudentAttribute> attributes;
         internal Dictionary<DateTime, AttendanceEvent> attendanceRecord;
 
-        public Student(string name, int seatNumber, DateTime birthday, string address1, string address2, string notes, List<StudentAttribute> attributes, Dictionary<DateTime, AttendanceEvent> attendanceRecord)
+        public Student(string name, int seatNumber, DateTime birthday, string address1, string address2, string notes, Dictionary<DateTime, AttendanceEvent> attendanceRecord)
         {
             this.name = name;
             this.seatNumber = seatNumber;
@@ -69,7 +61,6 @@ namespace FS_CS_ETS_Project
             this.address1 = address1;
             this.address2 = address2;
             this.notes = notes;
-            this.attributes = attributes;
             this.attendanceRecord = attendanceRecord;
         }
     }
